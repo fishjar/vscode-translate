@@ -33,6 +33,7 @@ function activate(context) {
         vscode.window.showInformationMessage(`未选中任何文本！`);
         return;
       }
+      vscode.window.showInformationMessage(`${text}`);
 
       // 翻译
       let data;

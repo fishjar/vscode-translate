@@ -27,9 +27,12 @@ function activate(context) {
       // 获取选中文字
       const editor = vscode.window.activeTextEditor;
       const selection = editor.selections[0];
-      console.log("selection", selection);
-      const text = editor.document.getText(selection);
+      const text = editor.document.getText(selection).trim();
       console.log("txt", text);
+      if (!text) {
+        vscode.window.showInformationMessage(`未选中任何文本！`);
+        return;
+      }
 
       // 翻译
       let data;

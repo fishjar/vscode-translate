@@ -3,6 +3,12 @@
   "displayName": "vscode translate",
   "description": "翻译小插件 translate tool",
   "version": "0.0.1",
+  "author": "Gabe Yuan[yugang2002@gmail.com]",
+  "publisher": "fishjar",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fishjar/vscode-translate.git"
+  },
   "engines": {
     "vscode": "^1.38.0"
   },
@@ -10,14 +16,22 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:vscode-translate.helloWorld"
+    "onCommand:vscode-translate.translate"
   ],
   "main": "./extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "vscode-translate.helloWorld",
-        "title": "Hello World"
+        "command": "vscode-translate.translate",
+        "title": "Mihuan:translate"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "vscode-translate.translate",
+        "key": "ctrl+shift+t",
+        "mac": "cmd+shift+t",
+        "when": "editorTextFocus"
       }
     ]
   },
@@ -27,14 +41,17 @@
     "test": "node ./test/runTest.js"
   },
   "devDependencies": {
-    "@types/vscode": "^1.38.0",
     "@types/glob": "^7.1.3",
     "@types/mocha": "^8.0.0",
     "@types/node": "^14.0.27",
+    "@types/vscode": "^1.38.0",
     "eslint": "^7.6.0",
     "glob": "^7.1.6",
     "mocha": "^8.0.1",
     "typescript": "^3.8.3",
     "vscode-test": "^1.4.0"
+  },
+  "dependencies": {
+    "node-fetch": "^2.6.0"
   }
 }

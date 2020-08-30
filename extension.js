@@ -54,6 +54,7 @@ function activate(context) {
         vscode.window.showInformationMessage(`${msg}`);
       } catch (err) {
         console.log("err", err);
+        vscode.window.showInformationMessage(`翻译出错了：${msg}`);
       }
     }
   );

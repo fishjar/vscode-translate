@@ -35,40 +35,25 @@ function activate(context) {
       }
       vscode.window.showInformationMessage(`${text}`);
 
-      // 翻译
-      let data;
       try {
-        data = await api.fetchDict(text);
+        // google翻译
+        let data = await api.fetchDict(text);
+        let msg = data.sentences.map((item) => item.trans).join(", ");
+        vscode.window.showInformationMessage(`${msg}`);
+
+        // 判断是否单个英文单词
+        if (data.src !== "en" || /\n|\r/.test(text)) {
+          return;
+        }
+
+        // bing翻译
+        data = await api.fetchDict(text, "bing");
+        msg =
+          `${data.phonetic_US}${data.phonetic_UK}` +
+          data.translation.map((item) => `[${item.pos}]${item.def}`).join(", ");
+        vscode.window.showInformationMessage(`${msg}`);
       } catch (err) {
         console.log("err", err);
-      }
-      console.log("data", data);
-      if (!data) {
-        return;
-      }
-
-      // Display a message box to the user
-      if (data.google) {
-        let msg = "";
-        try {
-          msg = data.google.sentences.map((item) => item.trans).join(", ");
-        } catch (err) {
-          console.log("err", err);
-        }
-        vscode.window.showInformationMessage(`${msg}`);
-      }
-      if (data.bing) {
-        let msg = "";
-        try {
-          msg =
-            `${data.bing.phonetic_US}${data.bing.phonetic_UK}` +
-            data.bing.translation
-              .map((item) => `[${item.pos}]${item.def}`)
-              .join(", ");
-        } catch (err) {
-          console.log("err", err);
-        }
-        vscode.window.showInformationMessage(`${msg}`);
       }
     }
   );

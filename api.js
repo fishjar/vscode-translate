@@ -31,7 +31,7 @@ module.exports.fetchDict = async function (word, dict = "google") {
     });
   const response = await fetch(url.format(options));
   const json = await response.json();
-  console.log(`${dict} dasta`, json);
+  console.log(`${dict} data`, json);
 
   return json;
 };

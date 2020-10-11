@@ -39,10 +39,10 @@ function activate(context) {
         // google翻译
         let data = await api.fetchDict(text);
         let msg = data.sentences.map((item) => item.trans).join(", ");
-        vscode.window.showInformationMessage(`${msg}`);
+        vscode.window.showInformationMessage(`google >> ${msg}`);
 
         // 判断是否单个英文单词
-        if (data.src !== "en" || /\n|\r/.test(text)) {
+        if (data.src !== "en" || /\s|\n|\r|\t/.test(text)) {
           return;
         }
 
@@ -51,10 +51,10 @@ function activate(context) {
         msg =
           `${data.phonetic_US}${data.phonetic_UK}` +
           data.translation.map((item) => `[${item.pos}]${item.def}`).join(", ");
-        vscode.window.showInformationMessage(`${msg}`);
+        vscode.window.showInformationMessage(`bing >> ${msg}`);
       } catch (err) {
         console.log("err", err);
-        vscode.window.showInformationMessage(`翻译出错了：${msg}`);
+        vscode.window.showInformationMessage(`翻译出错了：${err}`);
       }
     }
   );

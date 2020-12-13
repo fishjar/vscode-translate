@@ -41,7 +41,9 @@ function activate(context) {
           vscode.window.showInformationMessage(`请重试!`);
           return;
         }
-        vscode.window.showInformationMessage(`[谷歌翻译] ${resGoogle.trans}`);
+        vscode.window.showInformationMessage(
+          `[谷歌翻译] ${resGoogle.trans.join(" ")}`
+        );
 
         if (resGoogle.isWord) {
           // 英文单词
@@ -68,7 +70,7 @@ function activate(context) {
             return;
           }
           resTrans.forEach((item) => {
-            const msg = `[${item.botName}] ${item.result}`;
+            const msg = `[${item.botName}] ${item.trans.join(" ")}`;
             vscode.window.showInformationMessage(msg);
           });
         }

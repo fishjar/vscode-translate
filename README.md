@@ -7,3 +7,9 @@
 - 如果是单个的英文单词，还会返回`bing`词典的翻译
 
 ![截图](./screenshot-1.png)
+
+## 打包
+
+```sh
+vsce package
+```

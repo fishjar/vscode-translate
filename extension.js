@@ -28,7 +28,7 @@ function activate(context) {
       const editor = vscode.window.activeTextEditor;
       const selection = editor.selections[0];
       const text = editor.document.getText(selection).trim();
-      console.log("txt", text);
+      console.log("select txt", text);
       if (!text) {
         vscode.window.showInformationMessage(`未选中任何文本！`);
         return;
@@ -36,25 +36,45 @@ function activate(context) {
       vscode.window.showInformationMessage(`${text}`);
 
       try {
-        // google翻译
-        let data = await api.fetchDict(text);
-        let msg = data.sentences.map((item) => item.trans).join(", ");
-        vscode.window.showInformationMessage(`google >> ${msg}`);
-
-        // 判断是否单个英文单词
-        if (data.src !== "en" || /\s|\n|\r|\t/.test(text)) {
+        const resGoogle = await api.fetchGoogle(text);
+        if (!resGoogle) {
+          vscode.window.showInformationMessage(`请重试!`);
           return;
         }
+        vscode.window.showInformationMessage(`[谷歌翻译] ${resGoogle.trans}`);
 
-        // bing翻译
-        data = await api.fetchDict(text, "bing");
-        msg =
-          `${data.phonetic_US}${data.phonetic_UK}` +
-          data.translation.map((item) => `[${item.pos}]${item.def}`).join(", ");
-        vscode.window.showInformationMessage(`bing >> ${msg}`);
+        if (resGoogle.isWord) {
+          // 英文单词
+          const resDict = await api.fetchDict(text);
+          if (!resDict || !Array.isArray(resDict)) {
+            vscode.window.showInformationMessage(`请重试!`);
+            return;
+          }
+          resDict.forEach((item) => {
+            const trans = item.trans
+              .map((t) => `[${t.pos}] ${t.def}`)
+              .join("; ");
+            const variants = item.variants
+              .map((v) => `[${v.pos}] ${v.def}`)
+              .join("; ");
+            const msg = `[${item.botName}] ${item.phoneticUS} ${item.phoneticUK} ${trans} ${variants}`;
+            vscode.window.showInformationMessage(msg);
+          });
+        } else {
+          // 非英文单词
+          const resTrans = await api.fetchTrans(text, resGoogle.tl);
+          if (!resTrans || !Array.isArray(resTrans)) {
+            vscode.window.showInformationMessage(`请重试!`);
+            return;
+          }
+          resTrans.forEach((item) => {
+            const msg = `[${item.botName}] ${item.result}`;
+            vscode.window.showInformationMessage(msg);
+          });
+        }
       } catch (err) {
         console.log("err", err);
-        vscode.window.showInformationMessage(`翻译出错了：${err}`);
+        vscode.window.showInformationMessage(`翻译出错了：${err.message}`);
       }
     }
   );

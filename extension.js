@@ -33,7 +33,7 @@ function activate(context) {
         vscode.window.showInformationMessage(`未选中任何文本！`);
         return;
       }
-      vscode.window.showInformationMessage(`${text}`);
+      // vscode.window.showInformationMessage(`${text}`);
 
       try {
         const resGoogle = await api.fetchGoogle(text);
@@ -41,25 +41,13 @@ function activate(context) {
           vscode.window.showInformationMessage(`请重试!`);
           return;
         }
-        vscode.window.showInformationMessage(`${resGoogle.trans.join(" ")}`);
 
         if (resGoogle.isWord) {
-          // 英文单词
-          // const resDict = await api.fetchDict(text);
-          // if (!resDict || !Array.isArray(resDict)) {
-          //   vscode.window.showInformationMessage(`请重试!`);
-          //   return;
-          // }
-          // resDict.forEach((item) => {
-          //   const trans = item.trans
-          //     .map((t) => `[${t.pos}] ${t.def}`)
-          //     .join("; ");
-          //   const variants = item.variants
-          //     .map((v) => `[${v.pos}] ${v.def}`)
-          //     .join("; ");
-          //   const msg = `[${item.botName}] ${item.phoneticUS} ${item.phoneticUK} ${trans} ${variants}`;
-          //   vscode.window.showInformationMessage(msg);
-          // });
+          // 英文单词，展示单词本身及谷歌翻译结果，并查询bing词典
+          vscode.window.showInformationMessage(
+            `${text} ${resGoogle.trans.join(" ")}`
+          );
+
           const resDict = await api.fetchBingDict(text);
           if (!resDict) {
             vscode.window.showInformationMessage(`请重试!`);
@@ -71,19 +59,15 @@ function activate(context) {
           const variants = resDict.variants
             .map((v) => `[${v.pos}] ${v.def}`)
             .join("; ");
-          const msg = `${resDict.phoneticUS} ${resDict.phoneticUK} ${trans} ${variants}`;
+          let msg = "";
+          resDict.phoneticUS && (msg += `${resDict.phoneticUS} `);
+          resDict.phoneticUK && (msg += `${resDict.phoneticUK} `);
+          trans && (msg += `${trans} `);
+          variants && (msg += `${variants} `);
           vscode.window.showInformationMessage(msg);
         } else {
-          // 非英文单词
-          // const resTrans = await api.fetchTrans(text, resGoogle.tl);
-          // if (!resTrans || !Array.isArray(resTrans)) {
-          //   vscode.window.showInformationMessage(`请重试!`);
-          //   return;
-          // }
-          // resTrans.forEach((item) => {
-          //   const msg = `[${item.botName}] ${item.trans.join(" ")}`;
-          //   vscode.window.showInformationMessage(msg);
-          // });
+          // 非英文单词，仅展示谷歌翻译结果
+          vscode.window.showInformationMessage(`${resGoogle.trans.join(" ")}`);
         }
       } catch (err) {
         console.log("err", err);

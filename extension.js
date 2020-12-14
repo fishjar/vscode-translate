@@ -41,38 +41,49 @@ function activate(context) {
           vscode.window.showInformationMessage(`请重试!`);
           return;
         }
-        vscode.window.showInformationMessage(
-          `[谷歌翻译] ${resGoogle.trans.join(" ")}`
-        );
+        vscode.window.showInformationMessage(`${resGoogle.trans.join(" ")}`);
 
         if (resGoogle.isWord) {
           // 英文单词
-          const resDict = await api.fetchDict(text);
-          if (!resDict || !Array.isArray(resDict)) {
+          // const resDict = await api.fetchDict(text);
+          // if (!resDict || !Array.isArray(resDict)) {
+          //   vscode.window.showInformationMessage(`请重试!`);
+          //   return;
+          // }
+          // resDict.forEach((item) => {
+          //   const trans = item.trans
+          //     .map((t) => `[${t.pos}] ${t.def}`)
+          //     .join("; ");
+          //   const variants = item.variants
+          //     .map((v) => `[${v.pos}] ${v.def}`)
+          //     .join("; ");
+          //   const msg = `[${item.botName}] ${item.phoneticUS} ${item.phoneticUK} ${trans} ${variants}`;
+          //   vscode.window.showInformationMessage(msg);
+          // });
+          const resDict = await api.fetchBingDict(text);
+          if (!resDict) {
             vscode.window.showInformationMessage(`请重试!`);
             return;
           }
-          resDict.forEach((item) => {
-            const trans = item.trans
-              .map((t) => `[${t.pos}] ${t.def}`)
-              .join("; ");
-            const variants = item.variants
-              .map((v) => `[${v.pos}] ${v.def}`)
-              .join("; ");
-            const msg = `[${item.botName}] ${item.phoneticUS} ${item.phoneticUK} ${trans} ${variants}`;
-            vscode.window.showInformationMessage(msg);
-          });
+          const trans = resDict.trans
+            .map((t) => `[${t.pos}] ${t.def}`)
+            .join("; ");
+          const variants = resDict.variants
+            .map((v) => `[${v.pos}] ${v.def}`)
+            .join("; ");
+          const msg = `${resDict.phoneticUS} ${resDict.phoneticUK} ${trans} ${variants}`;
+          vscode.window.showInformationMessage(msg);
         } else {
           // 非英文单词
-          const resTrans = await api.fetchTrans(text, resGoogle.tl);
-          if (!resTrans || !Array.isArray(resTrans)) {
-            vscode.window.showInformationMessage(`请重试!`);
-            return;
-          }
-          resTrans.forEach((item) => {
-            const msg = `[${item.botName}] ${item.trans.join(" ")}`;
-            vscode.window.showInformationMessage(msg);
-          });
+          // const resTrans = await api.fetchTrans(text, resGoogle.tl);
+          // if (!resTrans || !Array.isArray(resTrans)) {
+          //   vscode.window.showInformationMessage(`请重试!`);
+          //   return;
+          // }
+          // resTrans.forEach((item) => {
+          //   const msg = `[${item.botName}] ${item.trans.join(" ")}`;
+          //   vscode.window.showInformationMessage(msg);
+          // });
         }
       } catch (err) {
         console.log("err", err);

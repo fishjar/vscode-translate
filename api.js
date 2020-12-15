@@ -5,7 +5,7 @@ const fetch = require("node-fetch");
 const rq = async (pathname, query) => {
   const options = {
     protocol: "https",
-    hostname: "trans.rayjar.com",
+    hostname: "caihua.jisunauto.com",
     pathname,
     query,
   };
@@ -20,11 +20,5 @@ const rq = async (pathname, query) => {
   return json;
 };
 
-module.exports.fetchGoogle = (q) => rq("google/auto", { q });
-
-module.exports.fetchDict = (q) => rq("smart/dict", { q });
-
-module.exports.fetchBingDict = (q) => rq("bing/dictf", { q });
-
-module.exports.fetchTrans = (q, tl) =>
-  rq("smart/translate", { q, tl, exc: true });
+module.exports.fetchGoogle = (q) => rq("trans/google/auto", { q });
+module.exports.fetchBingDict = (q) => rq("trans/bing/dictf", { q });

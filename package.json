@@ -2,7 +2,7 @@
   "name": "vscode-translate",
   "displayName": "vscode translate",
   "description": "翻译小插件 translate tool",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": "Gabe Yuan[yugang2002@gmail.com]",
   "publisher": "fishjar",
   "repository": {

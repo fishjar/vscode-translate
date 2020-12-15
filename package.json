@@ -36,6 +36,7 @@
     ]
   },
   "scripts": {
+    "build": "vsce package",
     "lint": "eslint .",
     "pretest": "yarn run lint",
     "test": "node ./test/runTest.js"

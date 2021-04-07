@@ -14,3 +14,14 @@
 - 谷歌浏览器翻译插件（mihuan-translate）： https://github.com/fishjar/mihuan-translate
 - VSCODE 翻译插件（vscode-translate）： https://github.com/fishjar/vscode-translate
 - 命令行翻译（gotrans）： https://github.com/fishjar/go-translate
+
+## 打包
+
+```sh
+yarn
+yarn global add vsce
+#或者
+npm i vsce -g
+
+vsce package
+```

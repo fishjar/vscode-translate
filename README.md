@@ -8,8 +8,20 @@
 
 ![截图](./screenshot-1.png)
 
-## 翻译系列自产自消项目
+## 翻译系列自用项目
 
 - 后端翻译服务（smart-translator）： https://github.com/fishjar/smart-translator
 - 谷歌浏览器翻译插件（mihuan-translate）： https://github.com/fishjar/mihuan-translate
 - VSCODE 翻译插件（vscode-translate）： https://github.com/fishjar/vscode-translate
+- 命令行翻译（gotrans）： https://github.com/fishjar/go-translate
+
+## 打包
+
+```sh
+yarn
+yarn global add vsce
+#或者
+npm i vsce -g
+
+vsce package
+```
